@@ -78,7 +78,7 @@ public class Autorun
             try
             {
                 BufferedWriter out = new BufferedWriter(new FileWriter("autorun/autorun.lua"));
-                out.write("plugins.load(\"com.epicknife.modules.builtin.TcpListener\");\n");
+                out.write("\n");
                 out.close();
             }
             catch(Exception e)

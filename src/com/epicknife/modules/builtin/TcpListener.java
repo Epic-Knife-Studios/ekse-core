@@ -27,7 +27,9 @@ public class TcpListener extends JavaPlugin
     public void onStart()
     {
         svars.readCfg("tcplistener");
-        Server.addReceiver(new ListenerThread());
+        Server.addReceiver(new ListenerThread(
+        		Integer.parseInt(svars.getVar("port"))
+		));
     }
     
     @Override

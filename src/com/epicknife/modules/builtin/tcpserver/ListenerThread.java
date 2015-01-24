@@ -17,19 +17,21 @@ public class ListenerThread extends ConnectionReceiver
 {
 
     private ServerSocket socket;
+    private int port;
 
-    public ListenerThread()
+    public ListenerThread(int port)
     {
         super("ListerThread");
+        this.port = port;
     }
     
     @Override
     public void onStart()
     {
-        Server.log.logInfo("TcpListener", "Creating new Tcp Listener on port " + Server.svars.getVar("port") + "...");
+        Server.log.logInfo("TcpListener", "Creating new Tcp Listener on port " + this.port + "...");
         try
         {
-            socket = new ServerSocket(Integer.parseInt(Server.svars.getVar("port")));
+            socket = new ServerSocket(this.port);
         }
         catch(NumberFormatException | IOException e)
         {
@@ -56,7 +58,7 @@ public class ListenerThread extends ConnectionReceiver
                 c.start();
                 ConnectionManager.add(c);
             }
-            catch(IOException e)
+            catch(Exception e)
             {
                 Server.log.logWarning("TcpListener", "Error accepting connection!");
                 e.printStackTrace();
@@ -66,7 +68,7 @@ public class ListenerThread extends ConnectionReceiver
         {
             socket.close();
         }
-        catch(IOException ignore)
+        catch(Exception ignore)
         {}
     }
     
@@ -78,7 +80,7 @@ public class ListenerThread extends ConnectionReceiver
             socket.close();
             this.stop();
         }
-        catch(IOException ignore)
+        catch(Exception ignore)
         {}
     }
 
