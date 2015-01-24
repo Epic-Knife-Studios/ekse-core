@@ -58,7 +58,7 @@
 
 	<build>
 		<sourceDirectory>${basedir}/src</sourceDirectory>
-		<defaultGoal>clean compile</defaultGoal>
+		<defaultGoal>clean compile package</defaultGoal>
 		<finalName>${project.artifactId}-${project.version}</finalName>
 		<testOutputDirectory>target/test</testOutputDirectory>
 
