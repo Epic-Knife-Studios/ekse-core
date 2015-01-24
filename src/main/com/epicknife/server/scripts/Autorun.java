@@ -73,14 +73,6 @@ public class Autorun
         {
             FileIO.mkdirRecursive("conf");
         }
-        if(!FileIO.fileExistsDirectory("save"))
-        {
-            FileIO.mkdirRecursive("save");
-        }
-        if(!FileIO.fileExistsDirectory("client"))
-        {
-            FileIO.mkdirRecursive("client");
-        }
         if(!FileIO.fileExistsBasic("autorun/autorun.lua"))
         {
             try
