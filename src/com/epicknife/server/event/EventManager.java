@@ -1,12 +1,10 @@
 package com.epicknife.server.event;
 
-import com.epicknife.server.Server;
+import com.epicknife.server.event.events.ServerEvent;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.epicknife.server.event.events.ServerEvent;
 
 /**
  * @author Samuel "MrOverkill" Meyers
@@ -18,36 +16,35 @@ import com.epicknife.server.event.events.ServerEvent;
 public class EventManager
 {
 
-    private static List<Class<?>> handlers = new ArrayList<>();
+    private List<Class<?>> handlers = new ArrayList<>();
 
-    private EventManager()
+    public EventManager()
     {}
     
-    public static void reset()
+    public void reset()
     {
         handlers = new ArrayList<>();
     }
     
-    public static void register(Class<?> clazz)
+    public boolean register(Class<?> clazz)
     {
         if(IEventHandler.class.isAssignableFrom(clazz))
         {
             if(!handlers.contains(clazz)) handlers.add(clazz);
+            return true;
         }
         else
         {
-            Server.log.logWarning("EventManager", 
-                    "Warning: class \"" + clazz.getName() + "\" is not an event handler!"
-            );
+            return false;
         }
     }
 
-    public static boolean containsEventHandler(Class<?> clazz)
+    public boolean containsEventHandler(Class<?> clazz)
     {
         return handlers.contains(clazz);
     }
 
-    public static void raiseEvent(final ServerEvent event)
+    public void raiseEvent(final ServerEvent event)
     {
         if(event.isAsync())
         {
@@ -66,7 +63,7 @@ public class EventManager
         }
     }
 
-    private static void raise(final ServerEvent event)
+    private void raise(final ServerEvent event)
     {
         if(handlers.isEmpty()) return; // Fail fast if the Array is Empty
 
@@ -91,10 +88,7 @@ public class EventManager
                     {
                         methods[i].invoke(handler.newInstance(), event);
                     }
-                    catch(Exception e)
-                    {
-                        e.printStackTrace();
-                    }
+                    catch(Exception e) { }
                 }
             }
         }

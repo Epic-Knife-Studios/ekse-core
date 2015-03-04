@@ -29,11 +29,10 @@ public class Server
     public static ServerSocket server;
     private static boolean running = false;
     public static Autorun autorun;
-    // Note: This shows in the config, but is immutable.
-    public static final String version = "0.0.1";
     public static Logger log;
     public static Config svars;
     public static ArrayList<ConnectionReceiver> listeners;
+    public static EventManager events;
     
     public static void main(String[] args)
     {
@@ -74,20 +73,10 @@ public class Server
         HashMap<String, String> defaults = new HashMap<>();
         listeners = new ArrayList<>();
 
-        //defaults.put("name", "An Epic Knife Server");
-        //defaults.put("tagline", "Welcome to the server!");
-        //defaults.put("motd", "Be excellent to each other!");
-        //defaults.put("max players", "16");
-        //defaults.put("game", "epicknifedefault");
-        //defaults.put("login format", "${PLAYER} Has joined the server!");
-        //defaults.put("chat format", "${PLAYER}: ${MESSAGE}");
-        //defaults.put("quit format", "${PLAYER} Has left the server!");
-        //defaults.put("gui enabled", "0");
-        //defaults.put("http enabled", "0");
-        //defaults.put("http port", "8008");
-
         svars = new Config(defaults);
         svars.ensureDefaults();
+        
+        events = new EventManager();
 
         log.logInfo("Main", "Data structures ready!");
 
@@ -117,7 +106,7 @@ public class Server
         {
             autorun.plugins.get(i).onStart();
         }
-        EventManager.raiseEvent(new StartEvent());
+        events.raiseEvent(new StartEvent());
         
         log.logInfo("Main", "Intializing listeners...");
         for (ConnectionReceiver listener : listeners)
@@ -156,7 +145,7 @@ public class Server
                 }
                 else
                 {
-                    EventManager.raiseEvent(new ConsoleEvent(line.replace("\n", "")));
+                    events.raiseEvent(new ConsoleEvent(line.replace("\n", "")));
                 }
                 System.out.print(">");
             }
@@ -187,8 +176,8 @@ public class Server
         {
             autorun.plugins.get(i).onStop();
         }
-        EventManager.raiseEvent(new ShutdownEvent());
-        EventManager.reset();
+        events.raiseEvent(new ShutdownEvent());
+        events.reset();
         log.logInfo("Main", "Epic Knife Server Stopping...");
         
         log.logInfo("Main", "Halting all connections...");

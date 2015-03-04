@@ -3,9 +3,7 @@ package com.epicknife.server.instructions;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import com.epicknife.server.Server;
-
 import com.epicknife.server.etc.ServerThread;
-import com.epicknife.server.event.EventManager;
 import com.epicknife.server.event.events.InstructionEvent;
 
 /**
@@ -43,7 +41,7 @@ public class InstructionThread extends ServerThread
         {
             while((in = instructions.poll()) != null)
             {
-                EventManager.raiseEvent(new InstructionEvent(in));
+                Server.events.raiseEvent(new InstructionEvent(in));
             }
         }
         
